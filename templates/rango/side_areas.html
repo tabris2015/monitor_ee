@@ -1,0 +1,16 @@
+{% if areas %}
+    <ul class="nav nav-sidebar">
+    {% for area in areas %}
+        {% if area == act_med %} 
+        	<li  class="active" > 
+        {% else  %} 
+        	<li>
+        {% endif %}
+           	<a href="{% url 'medidor'  area.slug %}">{{ area.nombre }}</a></li>
+    {% endfor %}
+
+{% else %}
+    <li> <strong >No hay medidores presentes.</strong></li>
+
+    </ul>
+{% endif %}

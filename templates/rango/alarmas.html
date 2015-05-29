@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% load rango_extras %}
+
+
+{% block title %}Alarmas{% endblock %}
+
+{% block body_block %}
+
+    {% if medidor %}
+    <h2>Alarmas del medidor {{medidor.nombre}} </h2>
+    {% else %}
+    <h2>Alarmas</h2>
+    {% endif %}
+
+    {% if alarmas %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>MEDIDOR</th>
+          <th>FECHA</th>
+          <th>TIPO</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      {% for alarma in alarmas %}
+      
+        {% if alarma.tipo == 'B' %}
+        <tr class="success">
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{alarma.medidor}}</td>
+          <td>{{alarma.fecha}}</td>
+          <td>¡Consumo Bajo!</td>
+        </tr>
+        {% else %}
+        <tr class="danger">
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{alarma.medidor}}</td>
+          <td>{{alarma.fecha}}</td>
+          <td>¡Consumo Alto! </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h3>No hay alarmas en este medidor!</h3>
+    {% endif %}
+
+
+
+
+
+    {% block extrajs %}
+        <!-- codigo del chart-->
+        <script src="{% static "js/chart_mes.js" %}"></script>
+    {% endblock %}
+    
+
+{% endblock %}
+
+{% block side_block %}
+                  
+                 Alarmas:
+                 <!-- lateral -->
+                {% get_areas_list_alarma medidor %}
+        
+                {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% load rango_extras %}
+
+{% block title %}{{ medidor_name }}{% endblock %}
+
+{% block body_block %}
+
+    <h1>{{ medidor_name }}</h1>
+    {% if medidor %}
+        {% if last_medida %}
+        <h3> Última medida: <span class="bg-primary">{{ last_medida.kwh }} KWh</span> </h3>
+        {% else %}
+                <strong>No se encuentra la última medida</strong>
+        {% endif %}
+
+        <a href="mensual" class="btn btn-outline-inverse btn-lg" >Mensual</a>
+        <a href="diario" class="btn btn-outline-inverse btn-lg" >Diario</a>
+        <div class="panel panel-default">
+            <div id="chart_medidor" class="panel-body" style="width:100%;height:314px"></div>
+        </div> 
+        <p id="med_name">{{medidor_name_slug}} </p>    
+    {% else %}
+       <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>
+    {% endif %}
+
+    {% block extrajs %}
+        <!-- codigo del chart-->
+        <script src="{% static "js/stock_med.js" %}"></script>
+    {% endblock %}
+    
+
+{% endblock %}
+ 
+
