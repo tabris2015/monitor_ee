@@ -6,7 +6,12 @@
 
 {% block title %}Index{% endblock %}
 
-{% block side_block %}  {% endblock %}
+{% block side_block %} 
+<ul class="nav nav-sidebar">
+    <li><a href="{% url 'resumen_mensual' %}">Resuman Mensual</a></li>
+    <li><a href="{% url 'resumen_diario' %}">Resumen Diario</a></li>
+</ul>
+{% endblock %}
 
 {% block body_block %}
 {% if user.is_authenticated %}

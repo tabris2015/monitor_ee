@@ -2,21 +2,20 @@
 
 {% load staticfiles %}
 
-{% block title %}{{ medidor_name }}-mensual{% endblock %}
+{% block title %}Resumen Diario{% endblock %}
+
+{% block side_block %}
+<ul class="nav nav-sidebar">
+    <li><a href="{% url 'resumen_mensual' %}">Resuman Mensual</a></li>
+    <li><a href="{% url 'resumen_diario' %}">Resumen Diario</a></li>
+</ul>
+{% endblock %}
+
 
 {% block body_block %}
 
-    <h1>{{ medidor_name }}
-        <small>Resumen Diario</small></h1>
+    <h1>Resumen Diario</h1>
     
-    {% if medidor %}
-        <div class="col-md-6">
-        {% if last_medida %}
-        <h3> Última medida: <span class="bg-primary">{{ last_medida.kwh }} KWh</span> </h3>
-        {% else %}
-                <strong>No se encuentra la última medida</strong>
-        {% endif %}
-        </div>
         <!--<form action="." method="GET"> -->
         <div class="col-md-6">
         <label for="mes">Introducir un dia: </label>
@@ -29,11 +28,7 @@
         <div class="panel panel-default">
             <div id="resumen_dia" class="panel-body" style="width:100%;height:314px"></div>
         </div>
-        <p id="med_name">{{medidor_name_slug}} </p>    
-    {% else %}
-       <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>
-    {% endif %}
-
+       
     {% block extrajs %}
         <!-- codigo del chart-->
         <script src="{% static "js/chart_dia.js" %}"></script>
