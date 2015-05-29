@@ -193,6 +193,58 @@ def diario(request, medidor_name_slug):
     # renderizamos la respuesta
     return render(request, 'rango/diario.html', context_dict)
 
+def resumen_mensual(request):
+    """
+	vista para crear un resumen para las tortas
+    """
+    context_dict = {}
+    #try:
+        # buscamos un nombre slug con el nombre dado
+        # si no existe sale un error
+        #el metodo .get() retorna una instancia modelo
+        #medidor = Medidor.objects.get(slug=medidor_name_slug)
+        #context_dict['medidor_name'] = medidor.nombre
+
+        #recuperamos el consumo del ultimo mes
+        #last_medida = Medidas.objects.filter(medidor=medidor)[0]
+        # aumente al contexto
+        #context_dict['last_medida'] = last_medida
+        # tambien aumentamos el objeto categoria de la base de datos
+        # usaremos esto en la plantilla para verificar
+        #context_dict['medidor']=medidor
+    #except Medidor.DoesNotExist:
+        #si es que no encontramos la categoria
+        #pass
+    #context_dict['medidor_name_slug'] = medidor_name_slug
+    # renderizamos la respuesta
+    return render(request, 'rango/resumen_mensual1.html', context_dict)
+
+def resumen_diario(request):
+    """
+        vista para crear un resumen para las tortas
+    """
+    context_dict = {}
+    #try:
+        # buscamos un nombre slug con el nombre dado
+        # si no existe sale un error
+        #el metodo .get() retorna una instancia modelo
+        #medidor = Medidor.objects.get(slug=medidor_name_slug)
+        #context_dict['medidor_name'] = medidor.nombre
+
+        #recuperamos el consumo del ultimo mes
+        #last_medida = Medidas.objects.filter(medidor=medidor)[0]
+        # aumente al contexto
+        #context_dict['last_medida'] = last_medida
+        # tambien aumentamos el objeto categoria de la base de datos
+        # usaremos esto en la plantilla para verificar
+        #context_dict['medidor']=medidor
+    #except Medidor.DoesNotExist:
+        #si es que no encontramos la categoria
+        #pass
+    #context_dict['medidor_name_slug'] = medidor_name_slug
+    # renderizamos la respuesta
+    return render(request, 'rango/resumen_diario1.html', context_dict)
+
 
 
 ############################################################
@@ -301,6 +353,43 @@ def chart_mes_json(request):
     data = ChartMes.get_month_power(month=fecha, medidor_slug=medidor_slug)
     return HttpResponse(json.dumps(data), content_type='application/json')
 #--------------------------------------
+@login_required
+def torta_mes_json(request):
+    data = {}
+    #recuperamos parametros del GET request
+    mes = request.GET.get('mes', '')
+    #medidor_slug = request.GET.get('medidor_slug', '')
+
+    print "mes: " + mes
+    if mes and not mes == "undefined":
+        formato_fecha = "%Y-%m"
+        fecha = datetime.strptime(mes,formato_fecha)
+        print "fecha:" #+ fecha
+    else:
+        fecha = datetime.today() #- timedelta(days=30)
+
+    #data= ChartDia.get_day_power(day=fecha, medidor_slug=medidor_slug)
+    data = ChartMes.get_month_power(month=fecha, resumen=True)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@login_required
+def torta_dia_json(request):
+    data = {}
+    #recuperamos parametros del GET request
+    dia = request.GET.get('dia', '')
+    medidor_slug = request.GET.get('medidor_slug', '')
+
+    if dia and not dia == "undefined":
+        formato_fecha = "%Y-%m-%d"
+        fecha = datetime.strptime(dia,formato_fecha)
+        print fecha
+    else:
+        fecha = datetime.today()
+
+    data= ChartDia.get_day_power(day=fecha)
+    #data = ChartMes.get_month_power(month=fecha, medidor_slug=medidor_slug)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 def about(request):
     """vista para informacion del desarrollador y la aplicacion"""

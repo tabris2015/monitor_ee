@@ -19,7 +19,7 @@ def add_months(sourcedate,months):
 #funcion de prueba para los highcharts
 class ChartMes(object):
     @classmethod
-    def get_month_power(cls, month, medidor_slug=""):
+    def get_month_power(cls, month, medidor_slug="", resumen=False):
         fecha_in = month - timedelta(days=month.day) #inicio del mes
         fecha_fin = add_months(fecha_in,1)
         dias = (fecha_fin - timedelta(days=1)).day
@@ -81,16 +81,28 @@ class ChartMes(object):
                 datos2=[]
                 for med in dato: #para cada arreglo
                     aux.append(med.kwh)  #obtenemos su kwh
-                print "--->horas: " + str(len(aux)) + " " + str(len(aux)/24)
+                #print "--->horas: " + str(len(aux)) + " " + str(len(aux)/24)
                 datos1.append(aux) 
-
+		#variablea auxiliar para la suma del mes si nos piden un resumen
+		sum_mes = 0
                 for dia_ in range(len(aux)/24): #para los dias del mes consultado
                     aux_dia = sum(aux[dia_:dia_+24])
-                    datos2.append(aux_dia)
+		    
+		    #si es que es resumen se van sumando
+                    if resumen:
+			sum_mes += aux_dia
+		    else:
+		    #si no se aumentan a una lista
+			datos2.append(aux_dia)
 
-                datos3.append(datos2)
+                if resumen:
+		    datos2.append(sum_mes)
+
+	        datos3.append(datos2)
                 
-                
+            
+	    
+		    
             #print "--........--"
             #print "medidores:" + str(len(datos3)) +" dias en arreglo:" + str(len(datos3[0])) 
             #print "--........--"    
@@ -100,9 +112,9 @@ class ChartMes(object):
                     'data':datos3[i]
                 })
 
-        #extrae datos entre 2 fechas desde la base de datos   
-        
         return series
+  
+######################################################
 
 class ChartDia(object):
     @classmethod
@@ -157,8 +169,16 @@ class ChartDia(object):
 
             for dato in datos:
                 aux=[]
+		sum_dia=0	#para el resumen
                 for med in dato:
-                    aux.append(med.kwh)
+		    if resumen:
+			sum_dia += med.kwh
+		    else:
+			aux.append(med.kwh)
+
+		if resumen:
+		    aux.append(sum_dia)
+
                 datos1.append(aux) 
 
             
