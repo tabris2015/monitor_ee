@@ -77,18 +77,23 @@ WSGI_APPLICATION = 'monitor_ee.wsgi.application'
 ##################################################
 
 #########...-------POSTGRES--------...#########
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'monitor1',                      
-        'USER': 'monitor',
-        'PASSWORD': 'pepsi',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'monitor1',                      
+#         'USER': 'monitor',
+#         'PASSWORD': 'pepsi',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 ################################################
 
+########...---------HEROKU----------...########
+
+DATABASES = {
+      'default' : dj_database_url.config(default='postrgres://localhost')
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
