@@ -65,14 +65,30 @@ WSGI_APPLICATION = 'monitor_ee.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+##########...-------MYSQL-------.....###########
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'monitor_ee',
+#         'USER': 'pepe',
+#         'PASSWORD': 'pepe',
+#     }
+# }
+##################################################
+
+#########...-------POSTGRES--------...#########
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'monitor_ee',
-        'USER': 'pepe',
-        'PASSWORD': 'pepe',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'monitor1',                      
+        'USER': 'monitor',
+        'PASSWORD': 'pepsi',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+################################################
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -85,7 +101,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

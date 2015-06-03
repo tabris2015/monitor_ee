@@ -1,46 +1,4 @@
-{% extends 'base.html' %}
-
-{% load staticfiles %}
-
-{% load rango_extras %}
-
-{% block title %}resumen mensual{% endblock %}
-
-{% block side_block %}
-<ul class="nav nav-sidebar">
-    <li><a href="{% url 'resumen_mensual' %}">Resuman Mensual</a></li>
-    <li><a href="{% url 'resumen_diario' %}">Resumen Diario</a></li>
-</ul>
-{% endblock %}
-
-
-{% block body_block %}
-
-    <h1>Resumen Mensual
-    </h1>
-        
-        <!--<form action="." method="GET"> -->
-        <div class="col-md-6">
-        <label for="mes">Introducir un mes: </label>
-        <input type="month" id="mes" name="mes" value="2014-2-1">
-            <button id="btn_buscar" class="btn btn-lg btn-primary">Buscar</button>
-        <!--</form>-->
-        </div>
-
-        
-        <div class="panel panel-default">
-            <div id="resumen_mes" class="panel-body" style="width:100%;height:400px"></div>
-        </div>  
-        <span id="jquery_test1"></span>
-       
-    
-
-    {% block extrajs %}
-        <!-- codigo del chart-->
-        <script src="{% static "js/chart_torta_mes.js" %}"></script>
-        <script>
-        /*
-        $(function () {
+$(function () {
             $(document).ready(function () {
                 var chart_options = {
                     chart: {
@@ -99,10 +57,3 @@
             });
 
         });
-        */
-        </script>
-    {% endblock %}
-    
-
-{% endblock %}
- 

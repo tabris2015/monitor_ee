@@ -38,8 +38,7 @@ def extraer():
     
     return datos,fecha		#devuelve una tupla con la lista de los valores y la fecha
 
-
-def generar_valor(instante, v_min=40, medidor=0):
+def generar_valor(instante, v_min=40):
     """genera un valor aleatorio dentro de rangos establecidos
         que varia segun la fecha y hora del acontecimiento
         ejemplo:
@@ -49,7 +48,7 @@ def generar_valor(instante, v_min=40, medidor=0):
 	del dia de la semana y del mes del anho
     """
     #pesos de horas: [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23]
-    w_horas =	     [5,5,5,6,40,40,30,30,6,7,8, 8, 80,80,80,90,70, 8, 7, 6, 9, 9, 9,8]
+    w_horas =	     [5,5,5,20,40,40,30,30,10,7,20, 40, 80,80,80,90,70, 50, 30, 15, 9, 9, 9,8]
     norm = sum(w_horas)
     #normalizamos el vector	
     for elemento in w_horas:
@@ -59,45 +58,60 @@ def generar_valor(instante, v_min=40, medidor=0):
     w_dia_semana=    [4,4,10,24,20,2,1]
     norm = sum(w_dia_semana)
     for dia in w_dia_semana:
-	w_dia_semana[w_dia_semana.index(dia)]=dia/float(norm)
+	   w_dia_semana[w_dia_semana.index(dia)]=dia/float(norm)
 
     #pesos de mes: 	[E,F,M,A,M,J,J,A,S,O,N,D]
-    w_mes=	 	[3,3,3,4,4,4,4,4,4,3,3,3]
+    w_mes=	 	[3,3,3,4,4,4,10,20,4,3,3,3]
     norm = sum(w_mes)
     for mes in w_mes:
-	w_mes[w_mes.index(mes)] = mes/float(norm)
+	   w_mes[w_mes.index(mes)] = mes/float(norm)
     
     #pesos del medidor
-    w_medidor = [1,1,0.7,0.7,0.8,0.4,0.5,1]*2
-    #pesos por tiempo:  		Hora, Dia, mes
-    base_hora, base_dia, base_mes  =  	1100,  60, 20
+
+    #w_medidor = [1,1,0.7,0.7,0.8,0.4,0.5,1]*2
+    #pesos por tiempo:  		        Hora, Dia, mes
+    base_hora, base_dia, base_mes  =  	1100,  200, 300
     
     valor = v_min + base_hora*w_horas[instante.hour]*random.uniform(0.5,2.5)\
 	+ base_dia*w_dia_semana[instante.weekday()]*random.uniform(0.4,1.2)\
 	+ base_mes*w_mes[instante.month-1]*random.uniform(0.3,1.1)
     
-    return int(valor*w_medidor[medidor])
-
-def generar_lista(fecha, med):
-    """genera una lista de medidas para cada medidor"""
+    return int(valor)
+#**
+def generar_lista(fecha, areas):
+    """genera un diccionario con las medidas y los nombres 
+        de cada medidor y lo devuelve junto con la fecha
+    """
+    nombres = []
     medidas = []
-    for i in range(med):
-	medidas.append(generar_valor(instante=fecha, medidor = i))
-    
-    return medidas, fecha
+    norm = float(sum(areas[1]))
+    #print "norm: " + str(norm)
 
+    for i in range(len(areas[0])):
+        nombres.append(areas[0][i])
+        alpha = areas[1][i]/norm
+        #print "factor: " + str(alpha)
+        medidas.append(generar_valor(fecha) * (areas[1][i] / norm))
+
+
+    #print "generado:"
+    #print nombres
+    #print medidas
+    #print " "
+    datos = [nombres, medidas]
+    return datos, fecha
 
 def ingresar(datos):
     """ingresa los datos a la base de datos"""
-    print "actualizando la base de datos"
-    i=0
-    for dato in datos[0]:
-	nombre= "med"+str(i)
-	med = add_medicion(nombre,dato, datos[1])
-	i = i+1    
-    print "ingresados " + str(len(datos[0])) + " registros en fecha" + datos[1].strftime('%d, %b %Y')
-    
+    #print "actualizando la base de datos..."
+    nombres = datos[0][0]
+    medidas = datos[0][1]
+    fecha = datos[1]
+    for i in range(len(nombres)):
+        med = add_medicion(nombres[i],medidas[i], fecha)
 
+    #print "ingresados " + str(len(medidas)) + " registros en fecha" + fecha.strftime('%d, %b %Y')
+    
 #nueva funcion
 def add_medicion(nombre_medidor,valor,fecha):
     medidor = Medidor.objects.get_or_create(nombre = nombre_medidor)[0]
@@ -105,9 +119,9 @@ def add_medicion(nombre_medidor,valor,fecha):
     med = Medidas.objects.get_or_create(medidor = medidor,fecha = fecha)[0]
     #print med
     #med.fecha=datetime.today()
-    med.kwh = valor
+    med.kwh = int(valor)
     #print "valor anadido"
-    #print valor
+    #print str(int(valor))
     med.save()
     #print "valor actualizado"
     return med
@@ -116,10 +130,18 @@ def add_medicion(nombre_medidor,valor,fecha):
 # Start execution here!
 if __name__ == '__main__':
     
+    areas = [['EMPACAR', 'servicios', 'frio', 'vapor', 'aire', 'PTA', 'linea_GRB', 'linea_PET2', 'linea_PET3'],
+                [20,        10,         30,     20,       20,   20,     90,         100,            90]]
+
     #fecha_in=datetime(2012,1,1)
-    tiempo = timedelta(days=120)
-    fecha_in = datetime.today()-timedelta(days=1)#-tiempo
-    for i in range(100*24):
-        delta= timedelta(hours=i)
-	ingresar(generar_lista(fecha_in+delta, 4))
+    anhos= 2    #anhos para ingresar datos
+    dias = anhos * 365  #dias en total
+    #dias = 1
+    horas = dias * 24   #horas en total
+    tiempo = timedelta(days=dias)
+    fecha_in = datetime.today()-timedelta(days=dias)  # fecha inicial
+    hora = timedelta(hours=1)           #delta de tiempo para ingresar
+    for i in range(horas):
+        ingresar(generar_lista(fecha_in+hora*i, areas))
+
     print "terminado!"

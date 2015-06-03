@@ -369,7 +369,7 @@ def torta_mes_json(request):
         fecha = datetime.today() #- timedelta(days=30)
 
     #data= ChartDia.get_day_power(day=fecha, medidor_slug=medidor_slug)
-    data = ChartMes.get_month_power(month=fecha, resumen=True)
+    data = ChartMes.get_month_torta(month=fecha)
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 @login_required

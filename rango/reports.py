@@ -19,6 +19,51 @@ def add_months(sourcedate,months):
 #funcion de prueba para los highcharts
 class ChartMes(object):
     @classmethod
+    def get_month_torta(cls,month):
+        fecha_in = month - timedelta(days=month.day) #inicio del mes
+        fecha_fin = add_months(fecha_in,1)
+        dias = (fecha_fin - timedelta(days=1)).day
+        datos = []
+        datos1 = []
+        datos2 = []
+        datos3 = []
+        series = []
+        anho = month.year
+        mes = month.month
+        #consulta a la DB
+        medidores = Medidor.objects.all()
+        for medidor in medidores:
+            datos.append(
+                Medidas.objects.filter(
+                medidor=medidor
+                ).exclude(
+                fecha__gte=fecha_fin    #fecha fin
+                ).filter(
+                fecha__gte=fecha_in  #fecha inicio
+                )
+            )
+
+        for dato in datos:
+            aux = []
+            datos2 = []
+            sum_mes = 0
+            
+            for indice, medida in enumerate(dato):
+                if indice == 0:
+                    nombre = str(dato[indice].medidor.nombre)
+                sum_mes+=medida.kwh
+                
+            datos3.append([nombre,sum_mes])
+
+        series = { 'type' : 'pie', 'name' : 'Consumo de potencia'}
+        series['data']=datos3
+        print datos3
+
+        
+        return series
+
+
+    @classmethod
     def get_month_power(cls, month, medidor_slug="", resumen=False):
         fecha_in = month - timedelta(days=month.day) #inicio del mes
         fecha_fin = add_months(fecha_in,1)
@@ -81,24 +126,20 @@ class ChartMes(object):
                 datos2=[]
                 for med in dato: #para cada arreglo
                     aux.append(med.kwh)  #obtenemos su kwh
-                #print "--->horas: " + str(len(aux)) + " " + str(len(aux)/24)
-                datos1.append(aux) 
-		#variablea auxiliar para la suma del mes si nos piden un resumen
-		sum_mes = 0
+                datos1.append(aux)
+                #variablea auxiliar para la suma del mes si nos piden un resumen
+                sum_mes = 0
                 for dia_ in range(len(aux)/24): #para los dias del mes consultado
                     aux_dia = sum(aux[dia_:dia_+24])
-		    
-		    #si es que es resumen se van sumando
+                #si es que es resumen se van sumando
                     if resumen:
-			sum_mes += aux_dia
-		    else:
-		    #si no se aumentan a una lista
-			datos2.append(aux_dia)
-
+                        sum_mes += aux_dia
+                    else:
+                        #si no se aumentan a una lista
+                        datos2.append(aux_dia)
                 if resumen:
-		    datos2.append(sum_mes)
-
-	        datos3.append(datos2)
+                    datos2.append(sum_mes)
+                datos3.append(datos2)
                 
             
 	    
