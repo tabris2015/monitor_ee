@@ -26,12 +26,12 @@
        <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>
     {% endif %}
 
-    {% block extrajs %}
-        <!-- codigo del chart-->
-        <script src="{% static "js/stock_med.js" %}"></script>
-    {% endblock %}
+    
     
 
 {% endblock %}
  
-
+{% block extrajs %}
+        <!-- codigo del chart-->
+        <script src="{% static "js/stock_med.js" %}"></script>
+{% endblock %}

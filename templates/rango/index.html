@@ -46,10 +46,12 @@
         
         
 
-        {% block extrajs %}
-        <!-- codigo del chart de prueba-->
-        <script src="{% static "js/chart_dia.js" %}"></script>
-        <script src="{% static "js/chart_mes.js" %}"></script>
-        <script src="{% static "js/chart_gauge.js" %}"></script>
-        {% endblock %}
+        
+    {% endblock %}
+    
+    {% block extrajs %}
+    <!-- codigo del chart de prueba-->
+    <script src="{% static "js/chart_dia.js" %}"></script>
+    <script src="{% static "js/chart_mes.js" %}"></script>
+    <script src="{% static "js/chart_gauge.js" %}"></script>
     {% endblock %}
