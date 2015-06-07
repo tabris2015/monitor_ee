@@ -15,6 +15,28 @@ def add_months(sourcedate,months):
     month = month % 12 + 1
     day = min(sourcedate.day,calendar.monthrange(year,month)[1])
     return datetime(year,month,day)
+
+# clase para los higstocks
+class Chart(object):
+    @classmethod
+    def get_medidor(cls, medidor_slug=""):
+        #TODO: devolver todos los datos del medidor en formato higstocks
+        pass
+        datos = []
+        datos1 = []
+        series = { 'data' : []}
+        if medidor_slug:
+            medidores= Medidor.objects.get(slug=medidor_slug)
+            datos.append(
+                Medidas.objects.filter(medidor=medidores)   #todas las medidas
+            )
+
+            for medida in datos[0]:
+                datos1.append(medida.kwh)
+
+        print len(datos1)
+        series['data'] = datos1
+        return series
 #-----------------------------------------------------
 #funcion de prueba para los highcharts
 class ChartMes(object):
