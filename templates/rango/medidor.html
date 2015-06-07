@@ -10,11 +10,6 @@
 
     <h1>{{ medidor_name }}</h1>
     {% if medidor %}
-        {% if last_medida %}
-        <h3> Última medida: <span class="bg-primary">{{ last_medida.kwh }} KWh</span> </h3>
-        {% else %}
-                <strong>No se encuentra la última medida</strong>
-        {% endif %}
 
         <a href="mensual" class="btn btn-outline-inverse btn-lg" >Mensual</a>
         <a href="diario" class="btn btn-outline-inverse btn-lg" >Diario</a>
@@ -26,12 +21,12 @@
        <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>
     {% endif %}
 
-    
+    {% block extrajs %}
+        <!-- codigo del chart-->
+        <script src="{% static "js/stock_med.js" %}"></script>
+    {% endblock %}
     
 
 {% endblock %}
  
-{% block extrajs %}
-        <!-- codigo del chart-->
-        <script src="{% static "js/stock_med.js" %}"></script>
-{% endblock %}
+
