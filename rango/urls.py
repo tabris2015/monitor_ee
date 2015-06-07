@@ -28,8 +28,9 @@ urlpatterns = patterns('',
 	url(r'^medidor/(?P<medidor_name_slug>[\w\-]+)/diario/$', views.diario, name = 'diario'),  
         #######vistas tortas ################################
 	url(r'^mensual/$', views.resumen_mensual, name = 'resumen_mensual'),
-        url(r'^diario/$', views.resumen_diario, name = 'resumen_diario'),
-        
+    url(r'^diario/$', views.resumen_diario, name = 'resumen_diario'),
+    #######################################################
+    url(r'^planta/$', views.resumen_planta, name = 'resumen_planta'),    
 	######################################################
 	url(r'^alarmas/$', views.alarmas, name='alarmas'),
 	url(r'^alarmas/(?P<medidor_name_slug>[\w\-]+)/$', views.alarma_med, name = 'alarma_med'),

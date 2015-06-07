@@ -245,7 +245,10 @@ def resumen_diario(request):
     # renderizamos la respuesta
     return render(request, 'rango/resumen_diario1.html', context_dict)
 
-
+def resumen_planta(request):
+    context_dict = {}
+    return render (request, 'rango/resumen_planta.html', context_dict)
+    
 
 ############################################################
 #######VISTA EJEMPLO######################
