@@ -248,7 +248,7 @@ def resumen_diario(request):
 def resumen_planta(request):
     context_dict = {}
     return render (request, 'rango/resumen_planta.html', context_dict)
-    
+
 
 ############################################################
 #######VISTA EJEMPLO######################
@@ -389,7 +389,7 @@ def torta_dia_json(request):
     else:
         fecha = datetime.today()
 
-    data= ChartDia.get_day_power(day=fecha)
+    data= ChartDia.get_day_torta(day=fecha)
     #data = ChartMes.get_month_power(month=fecha, medidor_slug=medidor_slug)
     return HttpResponse(json.dumps(data), content_type='application/json')
 

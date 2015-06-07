@@ -158,6 +158,51 @@ class ChartMes(object):
 ######################################################
 
 class ChartDia(object):
+
+    @classmethod
+    def get_day_torta(cls,day):
+        fecha_in = day
+        fecha_fin = day + timedelta(days=1)
+        
+        datos = []
+        datos1 = []
+        datos2 = []
+        datos3 = []
+        series = []
+        
+        #consulta a la DB
+        medidores = Medidor.objects.all()
+        for medidor in medidores:
+            datos.append(
+                Medidas.objects.filter(
+                medidor=medidor
+                ).exclude(
+                fecha__gte=fecha_fin    #fecha fin
+                ).filter(
+                fecha__gte=fecha_in  #fecha inicio
+                )
+            )
+
+        print len(datos)
+        for dato in datos:
+            aux = []
+            datos2 = []
+            sum_dia = 0
+            nombre = ""
+            for indice, medida in enumerate(dato):
+                if indice == 0:
+                    nombre = str(dato[indice].medidor.nombre)
+                sum_dia+=medida.kwh
+                
+            datos3.append([nombre,sum_dia])
+
+        series = { 'type' : 'pie', 'name' : 'Consumo de potencia'}
+        series['data']=datos3
+        print datos3
+
+        
+        return series
+
     @classmethod
     def get_day_power(cls, day, medidor_slug=""):
         fecha_in = day
