@@ -11,6 +11,7 @@ from rango.models import *
 #importando formularios
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
+from reports import ChartDia, ChartMes, Chart
 
 #vista de prueba para la hackaton de la nasa
 
@@ -108,7 +109,6 @@ def areas_main(request):
   
     response = render(request, 'rango/index.html', context_dict)
     return response
-
 
 #pagina de medidor
 def medidor(request, medidor_name_slug):
@@ -317,7 +317,7 @@ def javamap(request):
     return HttpResponse(json.dumps(series), content_type='application/json')
     #raise Http404 
 
-from reports import ChartDia, ChartMes
+
 #----------------------------------------
 @login_required 
 def chart_dia_json(request):
@@ -390,6 +390,16 @@ def torta_dia_json(request):
         fecha = datetime.today()
 
     data= ChartDia.get_day_torta(day=fecha)
+    #data = ChartMes.get_month_power(month=fecha, medidor_slug=medidor_slug)
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@login_required
+def completo_json(request):
+    data = {}
+    #recuperamos parametros del GET request
+    medidor_slug = request.GET.get('medidor_slug', '')
+
+    data= Chart.get_medidor(medidor_slug=medidor_slug)
     #data = ChartMes.get_month_power(month=fecha, medidor_slug=medidor_slug)
     return HttpResponse(json.dumps(data), content_type='application/json')
 
