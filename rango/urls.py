@@ -11,15 +11,15 @@ urlpatterns = patterns('',
 	url(r'^login/$', views.user_login, name='login'),	#mapeo para el login
 	url(r'^restricted/', views.restricted, name='restricted'),
 	url(r'^logout/$', views.user_logout, name='logout'), #cerrar sesion
-        url(r'^javamap/$', views.javamap, name='javamap'),
+    url(r'^javamap/$', views.javamap, name='javamap'),
     #url(r'^ult_semana/$', views.resumen_semanal, name='ult_semana'),
 	url(r'^ult_dia/$', views.ult_dia, name='ult_dia'),	
 	#----------------------reportes parametrizados-----------------#
-        url(r'^chart_dia_json/$', views.chart_dia_json, name = 'chart_dia_json'),
-        url(r'^chart_mes_json/$', views.chart_mes_json, name = 'chart_mes_json'),
+    url(r'^chart_dia_json/$', views.chart_dia_json, name = 'chart_dia_json'),
+    url(r'^chart_mes_json/$', views.chart_mes_json, name = 'chart_mes_json'),
 	url(r'^torta_dia_json/$', views.torta_dia_json, name = 'torta_dia_json'),
-        url(r'^torta_mes_json/$', views.torta_mes_json, name = 'torta_mes_json'),
-
+    url(r'^torta_mes_json/$', views.torta_mes_json, name = 'torta_mes_json'),
+    url(r'^completo_json/$', views.completo_json, name = 'completo_json'),
     #url(r'^chart_dia_json/$', views.chart_dia_json, name = 'chart_dia_json'),
 	url(r'^fuck/$', views.fuckedView, name = 'fuck'),
 	#####################################################3
