@@ -21,10 +21,11 @@ class Chart(object):
     @classmethod
     def get_medidor(cls, medidor_slug=""):
         #TODO: devolver todos los datos del medidor en formato higstocks
-        pass
+        #formato higstocks [[tiempo UTC,valor],[tiempo UTC,valor],[tiempo UTC,valor]]
+        
         datos = []
         datos1 = []
-        series = { 'data' : []}
+        series = []
         if medidor_slug:
             medidores= Medidor.objects.get(slug=medidor_slug)
             datos.append(
@@ -32,11 +33,14 @@ class Chart(object):
             )
 
             for medida in datos[0]:
-                datos1.append(medida.kwh)
+                datos1.append([int(medida.fecha.strftime('%s'))*1000, medida.kwh])
 
-        print len(datos1)
-        series['data'] = datos1
+        series=datos1
         return series
+
+        1199145600
+        1199232000000
+        1199160000
 #-----------------------------------------------------
 #funcion de prueba para los highcharts
 class ChartMes(object):
