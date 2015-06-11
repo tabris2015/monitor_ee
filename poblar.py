@@ -134,14 +134,28 @@ if __name__ == '__main__':
                 [20,        10,         30,     20,       20,   20,     90,         100,            90]]
 
     #fecha_in=datetime(2012,1,1)
-    anhos= 2    #anhos para ingresar datos
+    anhos= 3    #anhos para ingresar datos
     dias = anhos * 365  #dias en total
     #dias = 1
     horas = dias * 24   #horas en total
     tiempo = timedelta(days=dias)
     fecha_in = datetime.today()-timedelta(days=dias)  # fecha inicial
     hora = timedelta(hours=1)           #delta de tiempo para ingresar
+    print "generando datos desde "
+    print fecha_in
+    print "hasta:"
+    print datetime.today()
+    print "-------------- "
+
     for i in range(horas):
         ingresar(generar_lista(fecha_in+hora*i, areas))
+        if i == (horas / 8):
+            print "vamos por la octava parte"
+        elif i == (horas / 4):
+            print "vamos por la cuarta parte"
+        elif i == (horas / 2):
+            print "vamos por la mitad"
+        elif i == (3 * horas / 4):
+            print "3 cuartas partes!!"
 
     print "terminado!"
