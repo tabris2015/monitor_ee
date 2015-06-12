@@ -72,14 +72,15 @@ WSGI_APPLICATION = 'monitor_ee.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 ##########...-------MYSQL-------.....###########
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'monitor_ee',
-        'USER': 'pepe',
-        'PASSWORD': 'pepe',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'monitor_ee',
+#        'USER': 'tabris2015',
+#        'PASSWORD': 'pepe',
+#	'HOST': 'mysql.server',
+#    }
+#}
 ##################################################
 
 #########...-------POSTGRES--------...#########
@@ -96,12 +97,12 @@ DATABASES = {
 ################################################
 
 ########...---------SQLITE---------...########
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': DATABASE_PATH,
-#     }
-# }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': DATABASE_PATH,
+     }
+}
 ########...---------HEROKU----------...########
 
 # DATABASES = {
