@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% load rango_extras %}
+
+{% block title %}Home{% endblock %}
+
+{% block side_block %} 
+
+{% endblock %}
+
+{% block body_block %}
+
+    <div><h2>Bienvenido! </h2></div>
+    <div>
+	<p>Sistema de monitoreo´ y gestión de consumo de potencia</p>
+	<p>Este sistema aglutina una diversidad de herramientas de ggestion
+	y visualizacion, se compone de informes graficos y reportes mensuales
+	y diarios.</p>
+    </div>
+
+{% endblock %}
+    
+    {% block extrajs %}
+    <!-- codigo del chart de prueba-->
+    <script src="{% static "js/chart_dia.js" %}"></script>
+    <script src="{% static "js/chart_mes.js" %}"></script>
+    <script src="{% static "js/chart_gauge.js" %}"></script>
+    {% endblock %}

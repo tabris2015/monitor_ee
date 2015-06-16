@@ -6,7 +6,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'tango_project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    url(r'^$', views.index, name='home'), 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^rango/', include('rango.urls')),
     (r'^accounts/', include('registration.backends.simple.urls')),
