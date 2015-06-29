@@ -19,23 +19,44 @@
         <h2>Bienvenido! usuario: {{ user.username }}</h2>
     </div>
     <div class="row placeholders">
-        {% if medidores %}
-            {% for medidor in medidores %}
+        {% if resumen %}
+            {% for elemento in resumen %}
             <div class="col-xs-12 col-sm-4 placeholder">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                        <h3 class="panel-title">
-                        <a href="{% url 'medidor'  medidor.slug %}">{{ medidor.nombre }}</a></h3>
+                        <a href="{% url 'medidor'  elemento.medidor.slug %}">{{ elemento.medidor.nombre }}</a></h3>
                    </div>
                 </div>  
 
                 <div class="panel panel-default">
-                    <div id="ultimo_gauge" class="panel-body" 
-                        style="width:100%;height:150px"></div>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th>RESUMEN</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                              <th scope="row">MÁXIMO</th>
+                              <td class="warning"><b>{{elemento.maximo}}</b> KWh</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">MÍNIMO</th>
+                              <td class="warning"><b>{{elemento.minimo}}</b> KWh</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">PROMEDIO</th>
+                              <td class="success">{{elemento.promedio|floatformat}} KWh</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {% endfor %}
-        {% endif %}    
+        {% endif %}
+        
     </div>  
         
 

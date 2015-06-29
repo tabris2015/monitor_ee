@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.db.models import Avg, Max, Min
+
 import rango
 from .models import Medidor, Medidas
 
@@ -17,6 +19,35 @@ def add_months(sourcedate,months):
     return datetime(year,month,day)
 
 # clase para los higstocks
+
+class Overview(object):
+    @classmethod
+    def get_data(cls, medidor_slug=""):
+        datos = []
+
+        if medidor_slug:
+            medidor = Medidor.objects.get(slug=medidor_slug)
+            dic = Medidas.objects.filter(medidor=medidor).aggregate(maximo=Max('kwh'))
+            dic['medidor']=medidor.nombre
+            datos.append(dic)
+
+
+        else:
+            medidores = Medidor.objects.all()
+
+            for medidor in medidores:
+                dic = Medidas.objects.filter(
+                    medidor=medidor
+                    ).aggregate(
+                    maximo=Max('kwh'),
+                    minimo=Min('kwh'),
+                    promedio=Avg('kwh')
+                    )
+                dic['medidor']=medidor
+                datos.append(dic)
+
+        return datos
+
 class Chart(object):
     @classmethod
     def get_medidor(cls, medidor_slug=""):
@@ -38,9 +69,6 @@ class Chart(object):
         series=datos1
         return series
 
-        1199145600
-        1199232000000
-        1199160000
 #-----------------------------------------------------
 #funcion de prueba para los highcharts
 class ChartMes(object):
@@ -182,6 +210,7 @@ class ChartMes(object):
         return series
   
 ######################################################
+
 
 class ChartDia(object):
 

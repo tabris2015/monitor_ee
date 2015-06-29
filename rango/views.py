@@ -11,48 +11,12 @@ from rango.models import *
 #importando formularios
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
-from reports import ChartDia, ChartMes, Chart
+from reports import ChartDia, ChartMes, Chart, Overview
 
 #vista de prueba para la hackaton de la nasa
 
 def fuckedView(request):
     return HttpResponse(request.POST.get('datos'))
-
-
-def alarmas(request):
-    """vista para las alarmas, estaran mostradas en tablas"""
-    # Diccionario de contexto
-    alarmas_list = Alarma.objects.order_by('-fecha')[:7]
-    context_dict = {'alarmas': alarmas_list}
-    # retorna el template con el contexto
-    return render(request, 'rango/alarmas.html', context_dict)
-
-def alarma_med(request, medidor_name_slug):
-    """vista para las alarmas, estaran mostradas en tablas"""
-    # Diccionario de contexto
-    context_dict = {}
-    try:
-        # buscamos un nombre slug con el nombre dado
-        # si no existe sale un error
-        #el metodo .get() retorna una instancia modelo
-        medidor = Medidor.objects.get(slug=medidor_name_slug)
-        context_dict['medidor_name'] = medidor.nombre
-
-        #recuperamos el consumo del ultimo mes
-        #last_alarma = Alarma.objects.filter(medidor=medidor)[0]
-        # aumente al contexto
-        #context_dict['last_alarma'] = last_alarma
-        # tambien aumentamos el objeto categoria de la base de datos
-        # usaremos esto en la plantilla para verificar
-        context_dict['medidor']=medidor
-        alarmas_list = Alarma.objects.filter(medidor=medidor).order_by('-fecha')[:7]
-        context_dict['alarmas']=alarmas_list
-    except Medidor.DoesNotExist:
-        #si es que no encontramos la categoria
-        pass
-    context_dict['medidor_name_slug'] = medidor_name_slug
-    # renderizamos la respuesta
-    return render(request, 'rango/alarmas.html', context_dict)
 
 #vistas
 def index(request):
@@ -66,27 +30,18 @@ def index(request):
     #ordenamos categorias por likes en orden descendente
     # mostramos los primeros 5
     # ponemos la lista en el contexto de la plantilla
-    #--------------------------------------
-    # prueba para los datos del request GET
-    #-----------------------------
-    consulta = request.GET.get('q', '')
-    if consulta:
-        formato_fecha = "%Y-%m-%d"
-        fecha = datetime.strptime(consulta,formato_fecha)
-    else:
-        fecha = datetime.today()
-    #-------------------------------------------------
-    print type(consulta), type(fecha)
-    print consulta, fecha
-    category_list = Category.objects.order_by('-likes')[:7]
-    pages_list = Page.objects.order_by('-views')[:5]
-    context_dict = {'categories': category_list, 'pages': pages_list}
+    
     #-------------------------------------------
     # prueba para los datos del ultimo dia
-    medidores = Medidor.objects.all()
-    context_dict['medidores'] = medidores
-    context_dict['fecha']=fecha
 
+    medidores = Medidor.objects.all()
+
+    context_dict = {}
+    context_dict['medidores'] = medidores
+    #context_dict['fecha']=fecha
+
+    resumen = Overview.get_data()
+    context_dict['resumen'] = resumen
     #--------------------------------------------
     visits = int(request.COOKIES.get('visits','1'))
     reset_last_visit_time = False
@@ -94,20 +49,6 @@ def index(request):
     # si existe la cookie de ultima visita
     
     #response = render(request, 'rango/index.html', context_dict)
-    return response
-
-#areas para los medidores
-def areas_main(request):
-    """vista indice principal de la aplicacion de medidor"""
-    # Construye un diccionario para pasar al motor de templates
-    ###########################################################
-    # pasamos los datos de los medidores de las areas y la ultima medida
-
-    medidor_list = Medidor.objects.all()
-    medidas_list = Medidas.objects.order_by('id')[:1]
-    context_dict = {'categories': medidor_list, 'medidas': medidas_list}
-  
-    response = render(request, 'rango/index.html', context_dict)
     return response
 
 #pagina de medidor
@@ -250,22 +191,47 @@ def resumen_planta(request):
     return render (request, 'rango/resumen_planta.html', context_dict)
 
 
+# vistas para las alarmas
+def alarmas(request):
+    """vista para las alarmas, estaran mostradas en tablas"""
+    # Diccionario de contexto
+    alarmas_list = Alarma.objects.order_by('-fecha')[:7]
+    context_dict = {'alarmas': alarmas_list}
+    # retorna el template con el contexto
+    return render(request, 'rango/alarmas.html', context_dict)
+
+def alarma_med(request, medidor_name_slug):
+    """vista para las alarmas, estaran mostradas en tablas"""
+    # Diccionario de contexto
+    context_dict = {}
+    try:
+        # buscamos un nombre slug con el nombre dado
+        # si no existe sale un error
+        #el metodo .get() retorna una instancia modelo
+        medidor = Medidor.objects.get(slug=medidor_name_slug)
+        context_dict['medidor_name'] = medidor.nombre
+
+        #recuperamos el consumo del ultimo mes
+        #last_alarma = Alarma.objects.filter(medidor=medidor)[0]
+        # aumente al contexto
+        #context_dict['last_alarma'] = last_alarma
+        # tambien aumentamos el objeto categoria de la base de datos
+        # usaremos esto en la plantilla para verificar
+        context_dict['medidor']=medidor
+        alarmas_list = Alarma.objects.filter(medidor=medidor).order_by('-fecha')[:7]
+        context_dict['alarmas']=alarmas_list
+    except Medidor.DoesNotExist:
+        #si es que no encontramos la categoria
+        pass
+    context_dict['medidor_name_slug'] = medidor_name_slug
+    # renderizamos la respuesta
+    return render(request, 'rango/alarmas.html', context_dict)
+
 ############################################################
 #######VISTA EJEMPLO######################
 ################################
 #-------------------------
 
-def ult_total(request):
-    medidores = Medidor.objects.all()
-    datos, datos1 = [], []
-    acc = 0
-    for med in medidores:
-	acc += Medidas.objects.filter(medidor=med)[0].kwh
-
-    series = []
-    series.append({'name': "ultima Medida", 'data': acc})
-
-    return HttpResponse(json.dumps(series), content_type='application/json')
 
 def ult_dia(request):
     medidores = Medidor.objects.all()

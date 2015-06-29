@@ -134,8 +134,8 @@ if __name__ == '__main__':
                 [20,        10,         30,     20,       20,   20,     90,         100,            90]]
 
     #fecha_in=datetime(2012,1,1)
-    #anhos= 3    #anhos para ingresar datos
-    dias =90# anhos * 365  #dias en total
+    anhos= 1    #anhos para ingresar datos
+    dias = anhos * 365  #dias en total
     #dias = 1
     horas = dias * 24   #horas en total
     tiempo = timedelta(days=dias)
