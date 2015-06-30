@@ -24,6 +24,7 @@ urlpatterns = patterns('',
 	url(r'^fuck/$', views.fuckedView, name = 'fuck'),
 	#####################################################3
 	url(r'^medidor/(?P<medidor_name_slug>[\w\-]+)/$', views.medidor, name = 'medidor'),
+	url(r'^medidor/(?P<medidor_name_slug>[\w\-]+)/historico/$', views.historico, name = 'historico'),
 	url(r'^medidor/(?P<medidor_name_slug>[\w\-]+)/mensual/$', views.mensual, name = 'mensual'),
 	url(r'^medidor/(?P<medidor_name_slug>[\w\-]+)/diario/$', views.diario, name = 'diario'),  
         #######vistas tortas ################################

@@ -79,6 +79,32 @@ def medidor(request, medidor_name_slug):
     return render(request, 'rango/medidor.html', context_dict)
 
 # vista para resumen mensual
+def historico(request, medidor_name_slug):
+    """vista para cada categoria independiente"""
+    #creamos el diccionario de contexto para la plantilla
+    context_dict = {}
+    try:
+        # buscamos un nombre slug con el nombre dado
+        # si no existe sale un error
+        #el metodo .get() retorna una instancia modelo
+        medidor = Medidor.objects.get(slug=medidor_name_slug)
+        context_dict['medidor_name'] = medidor.nombre
+
+        #recuperamos la ultima medida del medidor
+        last_medida = Medidas.objects.filter(medidor=medidor)[0]
+
+        # aumente al contexto
+        context_dict['last_medida'] = last_medida
+        # tambien aumentamos el objeto categoria de la base de datos
+        # usaremos esto en la plantilla para verificar
+        context_dict['medidor']=medidor
+    except Medidor.DoesNotExist:
+        #si es que no encontramos la categoria
+        pass
+    context_dict['medidor_name_slug'] = medidor_name_slug
+    # renderizamos la respuesta
+    return render(request, 'rango/historico.html', context_dict)
+
 def mensual(request, medidor_name_slug):
     """
         vista para crear resumenes mensuales
