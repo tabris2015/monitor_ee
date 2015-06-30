@@ -11,13 +11,38 @@
     <h1>{{ medidor_name }}</h1>
     {% if medidor %}
 
+        {% if resumen %}
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>RESUMEN</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                      <th scope="row">MÁXIMO</th>
+                      <td class="warning"><b>{{resumen.0.maximo}}</b> KWh</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">MÍNIMO</th>
+                      <td class="warning"><b>{{resumen.0.minimo}}</b> KWh</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">PROMEDIO</th>
+                      <td class="success">{{resumen.0.promedio|floatformat}} KWh</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <a href="{% url 'historico' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Histórico</a>
+                <a href="{% url 'diario' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Diario</a>
+                <a href="{% url 'mensual' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Mensual</a>
+            </div>
+        {% endif %}
         
-        <div class="panel panel-default">
-            <div id="chart_medidor" class="panel-body" style="width:100%;height:400px"></div>
-        </div> 
-        <a href="mensual" class="btn btn-outline-inverse btn-lg" >Mensual</a>
-        <a href="diario" class="btn btn-outline-inverse btn-lg" >Diario</a>
-        <p id="med_name">{{medidor_name_slug}} </p>    
+        
     {% else %}
        <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>
     {% endif %}

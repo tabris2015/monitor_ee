@@ -15,8 +15,11 @@
         <div class="panel panel-default">
             <div id="chart_medidor" class="panel-body" style="width:100%;height:400px"></div>
         </div> 
-        <a href="mensual" class="btn btn-outline-inverse btn-lg" >Mensual</a>
-        <a href="diario" class="btn btn-outline-inverse btn-lg" >Diario</a>
+        <div>
+                <a href="{% url 'historico' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Histórico</a>
+                <a href="{% url 'diario' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Diario</a>
+                <a href="{% url 'mensual' medidor.slug %}" class="btn btn-outline-inverse btn-lg" >Mensual</a>
+        </div>
         <p id="med_name">{{medidor_name_slug}} </p>    
     {% else %}
        <h2 class="bg-warning">El medidor: {{ medidor_name }} no existe! </h2>

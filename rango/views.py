@@ -22,16 +22,6 @@ def fuckedView(request):
 def index(request):
     """vista indice principal de la aplicacion rango"""
     # Construye un diccionario para pasar al motor de templates
-    # Note la llave 'boldmessage' es el mismo del template
-    ###########################################################
-    #setear una cookie test
-    #request.session.set_test_cookie()
-    # consultamos la db por una lista de todas las categorias
-    #ordenamos categorias por likes en orden descendente
-    # mostramos los primeros 5
-    # ponemos la lista en el contexto de la plantilla
-    
-    #-------------------------------------------
     # prueba para los datos del ultimo dia
 
     medidores = Medidor.objects.all()
@@ -75,6 +65,7 @@ def medidor(request, medidor_name_slug):
         #si es que no encontramos la categoria
         pass
     context_dict['medidor_name_slug'] = medidor_name_slug
+    context_dict['resumen'] = Overview.get_data(medidor_name_slug)
     # renderizamos la respuesta
     return render(request, 'rango/medidor.html', context_dict)
 
